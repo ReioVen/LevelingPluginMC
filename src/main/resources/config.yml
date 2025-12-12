@@ -25,17 +25,26 @@ experience-gain:
     nether_gold_ore: 10
     nether_quartz_ore: 8
     ancient_debris: 25
-  herbalism:
+  farming:
+    # Crops
     wheat: 3
     carrot: 3
     potato: 3
     beetroot: 3
+    # Plants
     pumpkin: 5
     melon: 5
     sugarcane: 4
     cactus: 4
     nether_wart: 6
     chorus_fruit: 8
+    # Additional farmable items
+    cocoa: 3
+    sweet_berries: 2
+    glow_berries: 3
+    # Experience for breeding and harvesting (separate)
+    animal-breed: 8
+    crop-harvest: 4
   woodcutting:
     oak: 3
     spruce: 3
@@ -72,9 +81,6 @@ experience-gain:
   defense:
     damage-taken: 2
     player-kill: 15
-  farming:
-    animal-breed: 8
-    crop-harvest: 4
   smithing:
     item-craft: 5
   acrobatics:
@@ -101,8 +107,8 @@ skill-bonuses:
       netherite:
         level-50: 0.03  # 3% Netherite Scrap chance at level 50
   
-  # Herbalism bonuses
-  herbalism:
+  # Farming bonuses
+  farming:
     double-drop-chance-per-level: 0.02  # 2% per level
     auto-replant-level: 30  # Auto replant crops at this level
   

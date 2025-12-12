@@ -30,7 +30,6 @@ public class LevelingPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new MiningListener(this, experienceManager), this);
         getServer().getPluginManager().registerEvents(new ExcavationListener(this, experienceManager), this);
-        getServer().getPluginManager().registerEvents(new HerbalismListener(this, experienceManager), this);
         getServer().getPluginManager().registerEvents(new WoodcuttingListener(this, experienceManager), this);
         getServer().getPluginManager().registerEvents(new CombatListener(this, experienceManager), this);
         getServer().getPluginManager().registerEvents(new DefenseListener(this, experienceManager, skillManager), this);

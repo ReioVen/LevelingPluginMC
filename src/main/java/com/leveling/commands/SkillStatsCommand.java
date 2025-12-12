@@ -56,10 +56,10 @@ public class SkillStatsCommand implements CommandExecutor {
             } else if (skill == SkillType.EXCAVATION) {
                 double doubleDropPercent = Math.min(100.0, level * plugin.getConfigManager().getExcavationDoubleDropChancePerLevel() * 100);
                 player.sendMessage("    §7+§a" + String.format("%.1f", doubleDropPercent) + "% Double Drop Chance");
-            } else if (skill == SkillType.HERBALISM) {
-                double doubleDropPercent = Math.min(100.0, level * plugin.getConfigManager().getHerbalismDoubleDropChancePerLevel() * 100);
+            } else if (skill == SkillType.FARMING) {
+                double doubleDropPercent = Math.min(100.0, level * plugin.getConfigManager().getFarmingDoubleDropChancePerLevel() * 100);
                 player.sendMessage("    §7+§a" + String.format("%.1f", doubleDropPercent) + "% Double Drop Chance");
-                int autoReplantLevel = plugin.getConfigManager().getHerbalismAutoReplantLevel();
+                int autoReplantLevel = plugin.getConfigManager().getFarmingAutoReplantLevel();
                 if (level >= autoReplantLevel) {
                     player.sendMessage("    §7+§aAuto Replant §7(enabled)");
                 } else {

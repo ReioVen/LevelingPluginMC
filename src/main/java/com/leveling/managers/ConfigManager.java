@@ -16,7 +16,7 @@ public class ConfigManager {
     private double expMultiplier;
     private Map<Material, Integer> miningExp;
     private Map<Material, Integer> excavationExp;
-    private Map<Material, Integer> herbalismExp;
+    private Map<Material, Integer> farmingExp;
     private Map<Material, Integer> woodcuttingExp;
     private double combatExpPlayer;
     private double combatExpMob;
@@ -30,8 +30,8 @@ public class ConfigManager {
     // Skill bonuses
     private double miningDoubleDropChancePerLevel; // 2% per level
     private double excavationDoubleDropChancePerLevel; // 1% per level
-    private double herbalismDoubleDropChancePerLevel; // 2% per level
-    private int herbalismAutoReplantLevel; // Level 30
+    private double farmingDoubleDropChancePerLevel; // 2% per level
+    private int farmingAutoReplantLevel; // Level 30
     private double combatDamagePerLevel; // 0.5% per level
     private double combatDamageMaxPercent; // Max 25%
     private double defenseToughnessPerLevel; // 0.5% per level
@@ -113,14 +113,35 @@ public class ConfigManager {
             }
         }
         
-        // Load herbalism experience
-        herbalismExp = new HashMap<>();
+        // Load farming experience (merged from herbalism and farming)
+        farmingExp = new HashMap<>();
+        
+        // Load from farming section
+        var farmingSection = config.getConfigurationSection("experience-gain.farming");
+        if (farmingSection != null) {
+            for (String key : farmingSection.getKeys(false)) {
+                if (key.equals("animal-breed") || key.equals("crop-harvest")) {
+                    continue; // Skip these, they're handled separately
+                }
+                try {
+                    Material mat = Material.valueOf(key.toUpperCase());
+                    farmingExp.put(mat, farmingSection.getInt(key));
+                } catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning("Invalid material in farming config: " + key);
+                }
+            }
+        }
+        
+        // Also load from herbalism section (for backwards compatibility)
         var herbalismSection = config.getConfigurationSection("experience-gain.herbalism");
         if (herbalismSection != null) {
             for (String key : herbalismSection.getKeys(false)) {
                 try {
                     Material mat = Material.valueOf(key.toUpperCase());
-                    herbalismExp.put(mat, herbalismSection.getInt(key));
+                    // Only add if not already in farmingExp (farming takes priority)
+                    if (!farmingExp.containsKey(mat)) {
+                        farmingExp.put(mat, herbalismSection.getInt(key));
+                    }
                 } catch (IllegalArgumentException e) {
                     plugin.getLogger().warning("Invalid material in herbalism config: " + key);
                 }
@@ -171,8 +192,8 @@ public class ConfigManager {
         // Skill bonuses
         miningDoubleDropChancePerLevel = config.getDouble("skill-bonuses.mining.double-drop-chance-per-level", 0.02); // 2% per level
         excavationDoubleDropChancePerLevel = config.getDouble("skill-bonuses.excavation.double-drop-chance-per-level", 0.01); // 1% per level
-        herbalismDoubleDropChancePerLevel = config.getDouble("skill-bonuses.herbalism.double-drop-chance-per-level", 0.02); // 2% per level
-        herbalismAutoReplantLevel = config.getInt("skill-bonuses.herbalism.auto-replant-level", 30);
+        farmingDoubleDropChancePerLevel = config.getDouble("skill-bonuses.farming.double-drop-chance-per-level", 0.02); // 2% per level
+        farmingAutoReplantLevel = config.getInt("skill-bonuses.farming.auto-replant-level", 30);
         
         // Combat bonuses
         combatDamagePerLevel = config.getDouble("skill-bonuses.combat.damage-per-level", 0.005); // 0.5% per level
@@ -214,8 +235,8 @@ public class ConfigManager {
         return miningExp.getOrDefault(material, 0);
     }
     
-    public int getHerbalismExp(Material material) {
-        return herbalismExp.getOrDefault(material, 0);
+    public int getFarmingExp(Material material) {
+        return farmingExp.getOrDefault(material, 0);
     }
     
     public int getWoodcuttingExp(Material material) {
@@ -267,12 +288,12 @@ public class ConfigManager {
         return excavationDoubleDropChancePerLevel;
     }
     
-    public double getHerbalismDoubleDropChancePerLevel() {
-        return herbalismDoubleDropChancePerLevel;
+    public double getFarmingDoubleDropChancePerLevel() {
+        return farmingDoubleDropChancePerLevel;
     }
     
-    public int getHerbalismAutoReplantLevel() {
-        return herbalismAutoReplantLevel;
+    public int getFarmingAutoReplantLevel() {
+        return farmingAutoReplantLevel;
     }
     
     public double getCombatDamagePerLevel() {

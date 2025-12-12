@@ -99,11 +99,6 @@ public class SkillsCommand implements CommandExecutor {
             }
             sender.sendMessage("§7");
             sender.sendMessage("§7Available skills: " + getSkillList());
-            sender.sendMessage("§7");
-            sender.sendMessage("§7Examples:");
-            sender.sendMessage("§7  §e/level mining §7- View your mining stats + leaderboard");
-            sender.sendMessage("§7  §e/level lb combat 2 §7- View page 2 of combat leaderboard");
-            sender.sendMessage("§7  §e/levelstats §7- View all skills with double drop %");
             return true;
         }
         

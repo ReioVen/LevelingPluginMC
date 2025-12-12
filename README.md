@@ -1,11 +1,11 @@
 # LevelingPlugin
 
-A comprehensive Minecraft leveling system plugin for Paper/Spigot servers developed by **R3io**. This plugin adds skill-based progression with 9 unique skills, HUD displays, and powerful bonuses that enhance the gameplay experience.
+A comprehensive Minecraft leveling system plugin for Paper/Spigot servers developed by **R3io**. This plugin adds skill-based progression with 8 unique skills, HUD displays, and powerful bonuses that enhance the gameplay experience.
 
 ## 🎮 Features
 
 ### Skills System
-- **9 Unique Skills**: Mining, Excavation, Herbalism, Woodcutting, Combat, Defense, Farming, Smithing, and Acrobatics
+- **8 Unique Skills**: Mining, Excavation, Woodcutting, Combat, Defense, Farming, Smithing, and Acrobatics
 - **Level Cap**: All skills can level up to level 50
 - **Experience System**: Configurable experience requirements with exponential scaling
 - **HUD Display**: Real-time progress display above the hotbar showing level, percentage, and experience
@@ -25,9 +25,12 @@ A comprehensive Minecraft leveling system plugin for Paper/Spigot servers develo
   - Level 40+: 5% Diamond + 2% Gold Ingot drop chance
   - Level 50: 7% Diamond + 3% Netherite Scrap drop chance
 
-#### Herbalism
+#### Farming
 - **2% double drop chance per level**
 - **Auto Replant**: At level 30+, crops automatically replant (requires seeds in inventory)
+- Includes all crops: wheat, carrot, potato, beetroot, nether wart
+- Includes all plants: pumpkin, melon, sugarcane, cactus, chorus fruit, cocoa, berries
+- Animal breeding also gives farming experience
 
 #### Combat
 - **0.5% damage output per level** (max 25% at level 50)
@@ -98,7 +101,7 @@ experience:
 Configure experience gained for each action in `experience-gain` section:
 - Mining: Stone, coal, iron, gold, diamond, emerald, netherite
 - Excavation: Dirt, grass, sand, gravel, clay, etc.
-- Herbalism: Crops and plants
+- Farming: Crops (wheat, carrot, potato, beetroot, nether wart), plants (pumpkin, melon, sugarcane, cactus, etc.), and animal breeding
 - Woodcutting: All log types
 - Combat: Player kills and mob kills
 - Defense: Damage taken and PvP kills
@@ -167,11 +170,10 @@ Make sure to update the Java path in `build.bat` if needed.
 |-------|------|--------------|------------------|
 | **Mining** | ⛏ | Break ores | 2% double drops per level |
 | **Excavation** | ⛏ | Break dirt/sand/gravel | 1% double drops + special drops at higher levels |
-| **Herbalism** | 🌿 | Break crops/plants | 2% double drops + auto replant at 30+ |
 | **Woodcutting** | 🪓 | Break logs | Standard progression |
 | **Combat** | ⚔ | Kill mobs/players | 0.5% damage per level (max 25%) |
 | **Defense** | 🛡 | Take damage/PvP kills | 0.5% toughness per level (max 25%) |
-| **Farming** | 🌾 | Harvest crops/breed animals | Standard progression |
+| **Farming** | 🌾 | Break crops/plants/breed animals | 2% double drops + auto replant at 30+ |
 | **Smithing** | 🔨 | Craft items | 0.1% per level double craft chance (max 5%) |
 | **Acrobatics** | 🤸 | Take fall damage | 1% fall damage reduction per level |
 
@@ -234,7 +236,7 @@ Data is automatically:
 
 ### v1.0.0 (by R3io)
 - Initial release by R3io
-- 9 skills with level cap of 50
+- 8 skills with level cap of 50 (Farming merged from Herbalism)
 - HUD system with progress display
 - Admin commands for testing
 - Leaderboard system

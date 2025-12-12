@@ -3,7 +3,6 @@ package com.leveling.models;
 public enum SkillType {
     MINING("Mining", "⛏"),
     EXCAVATION("Excavation", "⛏"),
-    HERBALISM("Herbalism", "🌿"),
     WOODCUTTING("Woodcutting", "🪓"),
     COMBAT("Combat", "⚔"),
     DEFENSE("Defense", "🛡"),
