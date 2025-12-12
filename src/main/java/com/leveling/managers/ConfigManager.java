@@ -129,6 +129,23 @@ public class ConfigManager {
                     
                     // Handle special material name mappings
                     switch (upperKey) {
+                        // Crops (singular config names to plural Material names)
+                        case "CARROT":
+                            mat = Material.CARROTS;
+                            break;
+                        case "POTATO":
+                            mat = Material.POTATOES;
+                            break;
+                        case "BEETROOT":
+                            mat = Material.BEETROOTS;
+                            break;
+                        case "WHEAT":
+                            mat = Material.WHEAT;
+                            break;
+                        case "NETHER_WART":
+                            mat = Material.NETHER_WART;
+                            break;
+                        // Plants
                         case "SUGARCANE":
                             mat = Material.SUGAR_CANE;
                             break;
