@@ -88,13 +88,22 @@ public class SkillsCommand implements CommandExecutor {
         if (args.length > 0 && (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?"))) {
             sender.sendMessage("§6§l=== Level Commands ===");
             sender.sendMessage("§7/level §8- §7View all your skill levels");
-            sender.sendMessage("§7/level <skill> §8- §7View specific skill details");
-            sender.sendMessage("§7/levelstats §8- §7View detailed statistics");
+            sender.sendMessage("§7/level <skill> §8- §7View specific skill details + leaderboard");
+            sender.sendMessage("§7/level leaderboard <skill> [page] §8- §7View leaderboard for a skill");
+            sender.sendMessage("§7  §7Aliases: §e/level lb <skill> §7or §e/level top <skill>");
+            sender.sendMessage("§7/levelstats §8- §7View detailed statistics with bonuses");
+            sender.sendMessage("§7/leaderboard <skill> [page] §8- §7View leaderboard (standalone)");
+            sender.sendMessage("§7  §7Aliases: §e/lb <skill> §7or §e/top <skill>");
             if (sender.hasPermission("leveling.admin")) {
                 sender.sendMessage("§7/level set <player> <skill> <level> §8- §7Set a player's skill level (Admin)");
             }
             sender.sendMessage("§7");
             sender.sendMessage("§7Available skills: " + getSkillList());
+            sender.sendMessage("§7");
+            sender.sendMessage("§7Examples:");
+            sender.sendMessage("§7  §e/level mining §7- View your mining stats + leaderboard");
+            sender.sendMessage("§7  §e/level lb combat 2 §7- View page 2 of combat leaderboard");
+            sender.sendMessage("§7  §e/levelstats §7- View all skills with double drop %");
             return true;
         }
         

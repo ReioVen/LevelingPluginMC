@@ -42,8 +42,9 @@ A comprehensive Minecraft leveling system plugin for Paper/Spigot servers develo
 - Higher levels = less fall damage
 
 #### Smithing
-- **0.2% chance to return a resource** from crafting recipes
-- Save materials while crafting!
+- **0.1% chance per level to get 2x crafted item** (max 5% at level 50)
+- When triggered, you get 2 of the item you crafted instead of 1
+- Example: Craft a diamond sword → 5% chance to get 2 diamond swords!
 
 ### Commands
 
@@ -171,7 +172,7 @@ Make sure to update the Java path in `build.bat` if needed.
 | **Combat** | ⚔ | Kill mobs/players | 0.5% damage per level (max 25%) |
 | **Defense** | 🛡 | Take damage/PvP kills | 0.5% toughness per level (max 25%) |
 | **Farming** | 🌾 | Harvest crops/breed animals | Standard progression |
-| **Smithing** | 🔨 | Craft items | 0.2% resource return chance |
+| **Smithing** | 🔨 | Craft items | 0.1% per level double craft chance (max 5%) |
 | **Acrobatics** | 🤸 | Take fall damage | 1% fall damage reduction per level |
 
 ## 🎯 Usage Examples

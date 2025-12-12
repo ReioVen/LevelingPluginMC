@@ -75,8 +75,8 @@ public class SkillStatsCommand implements CommandExecutor {
                 double fallReductionPercent = Math.min(50.0, level * plugin.getConfigManager().getAcrobaticsDamageReductionPerLevel() * 100);
                 player.sendMessage("    §7+§b" + String.format("%.1f", fallReductionPercent) + "% Fall Damage Reduction");
             } else if (skill == SkillType.SMITHING) {
-                double returnChance = level * plugin.getConfigManager().getSmithingResourceReturnChance() * 100;
-                player.sendMessage("    §7+§e" + String.format("%.2f", returnChance) + "% Resource Return Chance");
+                double doubleCraftChance = Math.min(5.0, level * plugin.getConfigManager().getSmithingResourceReturnChance() * 100);
+                player.sendMessage("    §7+§e" + String.format("%.2f", doubleCraftChance) + "% Double Craft Chance");
             }
             
             player.sendMessage("");

@@ -122,7 +122,7 @@ skill-bonuses:
   
   # Smithing bonuses
   smithing:
-    resource-return-chance: 0.002  # 0.2% chance to return a resource from crafting
+    resource-return-chance: 0.001  # 0.1% per level (max 5% at level 50) - gives 2x crafted item
 
 # HUD Settings
 hud:
