@@ -1,0 +1,128 @@
+# Leveling Plugin Configuration
+
+# Maximum level for all skills
+max-level: 50
+
+# Experience required per level (formula: base * (level ^ multiplier))
+experience:
+  base: 100
+  multiplier: 1.5
+
+# Experience gained per action
+experience-gain:
+  mining:
+    stone: 5
+    coal: 8
+    iron: 10
+    gold: 12
+    diamond: 15
+    emerald: 20
+    netherite: 25
+  herbalism:
+    wheat: 3
+    carrot: 3
+    potato: 3
+    beetroot: 3
+    pumpkin: 5
+    melon: 5
+    sugarcane: 4
+    cactus: 4
+    nether_wart: 6
+    chorus_fruit: 8
+  woodcutting:
+    oak: 3
+    spruce: 3
+    birch: 3
+    jungle: 3
+    acacia: 3
+    dark_oak: 3
+    crimson: 4
+    warped: 4
+    mangrove: 3
+    cherry: 3
+  excavation:
+    dirt: 3
+    grass_block: 3
+    gravel: 4
+    sand: 2
+    red_sand: 2
+    clay: 5
+    soul_sand: 4
+    soul_soil: 4
+    mycelium: 3
+    podzol: 3
+    coarse_dirt: 3
+    rooted_dirt: 3
+  combat:
+    player: 20
+    mob: 10
+  defense:
+    damage-taken: 2
+    player-kill: 15
+  farming:
+    animal-breed: 8
+    crop-harvest: 4
+  smithing:
+    item-craft: 5
+  acrobatics:
+    fall-damage: 3
+
+# Skill Bonuses Configuration
+skill-bonuses:
+  # Mining bonuses
+  mining:
+    double-drop-chance-per-level: 0.02  # 2% per level
+  
+  # Excavation bonuses
+  excavation:
+    double-drop-chance-per-level: 0.01  # 1% per level
+    rare-drops:
+      diamond:
+        level-10: 0.01  # 1% chance at level 10+
+        level-20: 0.02  # 2% chance at level 20+
+        level-30: 0.03  # 3% chance at level 30+
+        level-40: 0.05  # 5% chance at level 40+
+        level-50: 0.07  # 7% chance at level 50
+      gold:
+        level-40: 0.02  # 2% Gold Ingot chance at level 40+
+      netherite:
+        level-50: 0.03  # 3% Netherite Scrap chance at level 50
+  
+  # Herbalism bonuses
+  herbalism:
+    double-drop-chance-per-level: 0.02  # 2% per level
+    auto-replant-level: 30  # Auto replant crops at this level
+  
+  # Combat bonuses
+  combat:
+    damage-per-level: 0.005  # 0.5% damage per level
+    max-damage-percent: 0.25  # Max 25% damage bonus
+  
+  # Defense bonuses
+  defense:
+    toughness-per-level: 0.005  # 0.5% toughness per level
+    max-toughness-percent: 0.25  # Max 25% toughness bonus
+  
+  # Acrobatics bonuses
+  acrobatics:
+    damage-reduction-per-level: 0.01  # 1% fall damage reduction per level
+  
+  # Smithing bonuses
+  smithing:
+    resource-return-chance: 0.002  # 0.2% chance to return a resource from crafting
+
+# HUD Settings
+hud:
+  enabled: true
+  update-interval: 20  # ticks (1 second)
+  position:
+    x: 0.5
+    y: 0.75  # Above hotbar
+  display-duration: 60  # ticks (3 seconds)
+  show-on-level-up: true
+
+# Storage
+storage:
+  type: file  # file or database
+  file: "playerdata.yml"
+

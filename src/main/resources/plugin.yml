@@ -1,0 +1,29 @@
+name: LevelingPlugin
+version: 1.0.0
+main: com.leveling.LevelingPlugin
+api-version: 1.21
+author: YourName
+description: A comprehensive leveling system with multiple skills
+
+commands:
+  level:
+    description: View your skill levels or set levels (admin)
+    usage: /level [skill] | /level set <player> <skill> <level> | /level help
+    aliases: [levels, lvl, skill, skills]
+  levelstats:
+    description: View detailed skill statistics
+    usage: /levelstats
+    aliases: [lvlstats, skillstats, stats]
+  leaderboard:
+    description: View leaderboard for a skill
+    usage: /leaderboard <skill> [page]
+    aliases: [lb, top]
+
+permissions:
+  leveling.admin:
+    description: Admin permissions for leveling plugin
+    default: op
+  leveling.use:
+    description: Use leveling system
+    default: true
+
