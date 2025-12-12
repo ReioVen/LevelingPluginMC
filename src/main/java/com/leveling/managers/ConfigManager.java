@@ -125,7 +125,7 @@ public class ConfigManager {
                 }
                 try {
                     Material mat;
-                    String upperKey = key.toUpperCase();
+                    String upperKey = key.toUpperCase().replace("-", "_");
                     
                     // Handle special material name mappings
                     switch (upperKey) {
@@ -179,13 +179,22 @@ public class ConfigManager {
                                 try {
                                     mat = Material.valueOf(upperKey + "_BLOCK");
                                 } catch (IllegalArgumentException e2) {
-                                    throw new IllegalArgumentException("Material not found: " + key);
+                                    // Try common variations for farming materials
+                                    if (upperKey.contains("SUGAR") || upperKey.contains("CANE")) {
+                                        mat = Material.SUGAR_CANE;
+                                    } else {
+                                        throw new IllegalArgumentException("Material not found: " + key);
+                                    }
                                 }
                             }
                             break;
                     }
                     
                     farmingExp.put(mat, farmingSection.getInt(key));
+                    // Debug: Log successful mappings for troubleshooting
+                    if (key.toLowerCase().contains("sugar") || key.toLowerCase().contains("cane")) {
+                        plugin.getLogger().info("Farming config loaded: " + key + " -> " + mat.name() + " (exp: " + farmingSection.getInt(key) + ")");
+                    }
                 } catch (IllegalArgumentException e) {
                     plugin.getLogger().warning("Invalid material in farming config: " + key + " - " + e.getMessage());
                 }
