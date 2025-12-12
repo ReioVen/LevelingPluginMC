@@ -124,10 +124,53 @@ public class ConfigManager {
                     continue; // Skip these, they're handled separately
                 }
                 try {
-                    Material mat = Material.valueOf(key.toUpperCase());
+                    Material mat;
+                    String upperKey = key.toUpperCase();
+                    
+                    // Handle special material name mappings
+                    switch (upperKey) {
+                        case "SUGARCANE":
+                            mat = Material.SUGAR_CANE;
+                            break;
+                        case "MELON":
+                            mat = Material.MELON;
+                            break;
+                        case "PUMPKIN":
+                            mat = Material.PUMPKIN;
+                            break;
+                        case "CACTUS":
+                            mat = Material.CACTUS;
+                            break;
+                        case "CHORUS_FRUIT":
+                            mat = Material.CHORUS_PLANT; // The block, not the fruit item
+                            break;
+                        case "COCOA":
+                            mat = Material.COCOA;
+                            break;
+                        case "SWEET_BERRIES":
+                            mat = Material.SWEET_BERRY_BUSH;
+                            break;
+                        case "GLOW_BERRIES":
+                            mat = Material.CAVE_VINES;
+                            break;
+                        default:
+                            // Try direct match first
+                            try {
+                                mat = Material.valueOf(upperKey);
+                            } catch (IllegalArgumentException e1) {
+                                // Try with _BLOCK suffix
+                                try {
+                                    mat = Material.valueOf(upperKey + "_BLOCK");
+                                } catch (IllegalArgumentException e2) {
+                                    throw new IllegalArgumentException("Material not found: " + key);
+                                }
+                            }
+                            break;
+                    }
+                    
                     farmingExp.put(mat, farmingSection.getInt(key));
                 } catch (IllegalArgumentException e) {
-                    plugin.getLogger().warning("Invalid material in farming config: " + key);
+                    plugin.getLogger().warning("Invalid material in farming config: " + key + " - " + e.getMessage());
                 }
             }
         }
