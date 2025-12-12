@@ -16,6 +16,10 @@ public class SkillManager {
     private final Map<UUID, PlayerSkillData> playerData;
     private static final String DEFENSE_TOUGHNESS_MODIFIER = "leveling_defense_toughness";
     private static final String COMBAT_DAMAGE_MODIFIER = "leveling_combat_damage";
+    // Old modifiers that should be removed (from previous versions)
+    private static final String DEFENSE_HEALTH_MODIFIER = "leveling_defense_health";
+    private static final String DEFENSE_STRENGTH_MODIFIER = "leveling_defense_strength";
+    private static final String DEFENSE_DEFENSE_MODIFIER = "leveling_defense_defense";
     
     public SkillManager(LevelingPlugin plugin) {
         this.plugin = plugin;
@@ -52,12 +56,17 @@ public class SkillManager {
         int defenseLevel = getLevel(player, SkillType.DEFENSE);
         ConfigManager config = plugin.getConfigManager();
         
+        // Remove OLD modifiers from previous versions (health, strength, defense)
+        removeAttributeModifier(player, Attribute.GENERIC_MAX_HEALTH, DEFENSE_HEALTH_MODIFIER);
+        removeAttributeModifier(player, Attribute.GENERIC_ATTACK_DAMAGE, DEFENSE_STRENGTH_MODIFIER);
+        removeAttributeModifier(player, Attribute.GENERIC_ARMOR, DEFENSE_DEFENSE_MODIFIER);
+        
         // Calculate toughness bonus (configurable)
         double toughnessPerLevel = config.getDefenseToughnessPerLevel();
         double maxToughness = config.getDefenseToughnessMaxPercent();
         double toughnessPercent = Math.min(maxToughness, defenseLevel * toughnessPerLevel);
         
-        // Remove old modifiers
+        // Remove current toughness modifier before reapplying
         removeAttributeModifier(player, Attribute.GENERIC_ARMOR_TOUGHNESS, DEFENSE_TOUGHNESS_MODIFIER);
         
         // Apply toughness bonus (percentage-based using MULTIPLY_SCALAR_1)

@@ -30,12 +30,13 @@ public class ExcavationListener implements Listener {
         Block block = event.getBlock();
         Material material = block.getType();
         
-        // Check if it's an excavation material (dirt, grass, sand, gravel, etc.)
+        // Check if it's an excavation material (all shovel-effective blocks)
         if (isExcavationMaterial(material)) {
+            // Give experience for all shovel-effective blocks
             int exp = plugin.getConfigManager().getExcavationExp(material);
-            // Default exp for dirt if not configured
-            if (exp == 0 && material == Material.DIRT) {
-                exp = 3; // Default dirt exp
+            // Default exp for unconfigured blocks
+            if (exp == 0) {
+                exp = 3; // Default exp for excavation blocks
             }
             if (exp > 0) {
                 experienceManager.addExperience(player, SkillType.EXCAVATION, exp);
@@ -48,6 +49,7 @@ public class ExcavationListener implements Listener {
     }
     
     private boolean isExcavationMaterial(Material material) {
+        // All blocks that are effective with shovel
         return material == Material.DIRT || 
                material == Material.GRASS_BLOCK ||
                material == Material.GRAVEL ||
@@ -59,7 +61,24 @@ public class ExcavationListener implements Listener {
                material == Material.MYCELIUM ||
                material == Material.PODZOL ||
                material == Material.COARSE_DIRT ||
-               material == Material.ROOTED_DIRT;
+               material == Material.ROOTED_DIRT ||
+               material == Material.MUD ||
+               material == Material.MUD_BRICKS ||
+               material == Material.PACKED_MUD ||
+               material == Material.SNOW_BLOCK ||
+               material == Material.SNOW ||
+               material == Material.MUDDY_MANGROVE_ROOTS ||
+               // Additional shovel-effective blocks
+               material.name().toLowerCase().contains("dirt") ||
+               material.name().toLowerCase().contains("sand") ||
+               material.name().toLowerCase().contains("gravel") ||
+               material.name().toLowerCase().contains("clay") ||
+               material.name().toLowerCase().contains("soul") ||
+               material.name().toLowerCase().contains("mud") ||
+               material.name().toLowerCase().contains("snow") ||
+               material.name().toLowerCase().contains("grass") ||
+               material.name().toLowerCase().contains("podzol") ||
+               material.name().toLowerCase().contains("mycelium");
     }
     
     private void handleExcavationDrops(BlockBreakEvent event, Player player) {
@@ -68,11 +87,20 @@ public class ExcavationListener implements Listener {
         // Double drops per level (configurable)
         double doubleDropChance = level * plugin.getConfigManager().getExcavationDoubleDropChancePerLevel();
         if (random.nextDouble() < doubleDropChance) {
-            // Give double drops
-            ItemStack original = new ItemStack(event.getBlock().getType());
-            event.getBlock().getWorld().dropItemNaturally(
-                event.getBlock().getLocation(), original
-            );
+            // Get the actual drops that will be given (respects silk touch, etc.)
+            Block block = event.getBlock();
+            ItemStack tool = player.getInventory().getItemInMainHand();
+            java.util.Collection<ItemStack> drops = block.getDrops(tool, player);
+            
+            for (ItemStack drop : drops) {
+                if (drop != null && drop.getType() != Material.AIR) {
+                    // Drop a copy of what the player actually receives
+                    ItemStack extraDrop = drop.clone();
+                    block.getWorld().dropItemNaturally(
+                        block.getLocation(), extraDrop
+                    );
+                }
+            }
         }
         
         // Special drops based on level

@@ -1,6 +1,6 @@
 # LevelingPlugin
 
-A comprehensive Minecraft leveling system plugin for Paper/Spigot servers that adds skill-based progression with 9 unique skills, HUD displays, and powerful bonuses.
+A comprehensive Minecraft leveling system plugin for Paper/Spigot servers developed by **R3io**. This plugin adds skill-based progression with 9 unique skills, HUD displays, and powerful bonuses that enhance the gameplay experience.
 
 ## 🎮 Features
 
@@ -73,7 +73,7 @@ A comprehensive Minecraft leveling system plugin for Paper/Spigot servers that a
    - Java 21+
 
 2. **Download**:
-   - Download the latest JAR from [Releases](https://github.com/yourusername/LevelingPlugin/releases)
+   - Download the latest JAR from [Releases](https://github.com/ReioVen/LevelingPluginMC/releases)
    - Or build from source (see Building section)
 
 3. **Install**:
@@ -129,8 +129,8 @@ defense-bonuses:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/LevelingPlugin.git
-   cd LevelingPlugin
+   git clone https://github.com/ReioVen/LevelingPluginMC.git
+   cd LevelingPluginMC
    ```
 
 2. **Set Java 21** (if not default):
@@ -231,13 +231,16 @@ Data is automatically:
 
 ## 🔄 Version History
 
-### v1.0.0
-- Initial release
+### v1.0.0 (by R3io)
+- Initial release by R3io
 - 9 skills with level cap of 50
 - HUD system with progress display
 - Admin commands for testing
 - Leaderboard system
 - Comprehensive bonuses system
+- Configurable double drop rates
+- Silk Touch protection for ores
+- All shovel-effective blocks in excavation
 
 ## 📄 License
 
@@ -255,19 +258,23 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 👤 Author
 
-[Your GitHub Username]
+**R3io** - Plugin Developer
+
+Created and developed by R3io. This plugin was built from the ground up to provide a comprehensive skill-based leveling system for Minecraft servers.
 
 ## 🙏 Acknowledgments
 
-- Built for Paper/Spigot
+- Built by R3io for Paper/Spigot servers
 - Uses Adventure API for modern text components
 - Inspired by classic RPG leveling systems
+- Special thanks to the Minecraft plugin development community
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/LevelingPlugin/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/LevelingPlugin/discussions)
+- **Issues**: [GitHub Issues](https://github.com/ReioVen/LevelingPluginMC/issues)
+- **Repository**: [GitHub](https://github.com/ReioVen/LevelingPluginMC)
+- **Developer**: R3io
 
 ---
 
-**Made with ❤️ for the Minecraft community**
+**Made with ❤️ by R3io for the Minecraft community**

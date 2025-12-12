@@ -40,7 +40,7 @@ public class LevelingPlugin extends JavaPlugin {
         
         // Register commands
         getCommand("level").setExecutor(new SkillsCommand(this, skillManager, experienceManager));
-        getCommand("levelstats").setExecutor(new SkillStatsCommand(skillManager, experienceManager));
+        getCommand("levelstats").setExecutor(new com.leveling.commands.SkillStatsCommand(skillManager, experienceManager));
         getCommand("leaderboard").setExecutor(new com.leveling.commands.LeaderboardCommand(this, skillManager));
         
         // Start HUD update task

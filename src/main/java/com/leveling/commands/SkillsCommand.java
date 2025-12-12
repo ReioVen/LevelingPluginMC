@@ -12,7 +12,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
+import java.util.*;
+import java.util.AbstractMap;
 
 public class SkillsCommand implements CommandExecutor {
     private final LevelingPlugin plugin;
@@ -106,6 +107,38 @@ public class SkillsCommand implements CommandExecutor {
         Player player = (Player) sender;
         
         if (args.length > 0) {
+            // Check if it's a leaderboard command
+            if (args[0].equalsIgnoreCase("leaderboard") || args[0].equalsIgnoreCase("lb") || args[0].equalsIgnoreCase("top")) {
+                if (args.length < 2) {
+                    player.sendMessage("§cUsage: /level leaderboard <skill> [page]");
+                    player.sendMessage("§7Available skills: " + getSkillList());
+                    return true;
+                }
+                
+                SkillType skill;
+                try {
+                    skill = SkillType.valueOf(args[1].toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    player.sendMessage("§cInvalid skill: " + args[1]);
+                    player.sendMessage("§7Available skills: " + getSkillList());
+                    return true;
+                }
+                
+                int page = 1;
+                if (args.length > 2) {
+                    try {
+                        page = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        player.sendMessage("§cInvalid page number: " + args[2]);
+                        return true;
+                    }
+                }
+                
+                // Show leaderboard for the skill
+                showLeaderboard(player, skill, page);
+                return true;
+            }
+            
             // Show specific skill
             try {
                 SkillType skill = SkillType.valueOf(args[0].toUpperCase());
@@ -118,6 +151,10 @@ public class SkillsCommand implements CommandExecutor {
                 player.sendMessage("§7Level: §e" + level);
                 player.sendMessage("§7Experience: §b" + String.format("%.1f", exp) + "§7/§b" + String.format("%.1f", expForNext));
                 player.sendMessage("§7Progress: §b" + String.format("%.1f", progress) + "%");
+                
+                // Show leaderboard for this skill
+                player.sendMessage("");
+                showLeaderboard(player, skill, 1);
             } catch (IllegalArgumentException e) {
                 player.sendMessage("§cInvalid skill: " + args[0]);
                 player.sendMessage("§7Available skills: " + getSkillList());
@@ -147,6 +184,61 @@ public class SkillsCommand implements CommandExecutor {
             }
         }
         return sb.toString();
+    }
+    
+    private void showLeaderboard(Player player, SkillType skill, int page) {
+        // Get all player data and sort by skill level
+        Map<UUID, PlayerSkillData> allData = skillManager.getAllPlayerData();
+        List<Map.Entry<UUID, Integer>> leaderboard = new ArrayList<>();
+        
+        for (Map.Entry<UUID, PlayerSkillData> entry : allData.entrySet()) {
+            int level = entry.getValue().getLevel(skill);
+            if (level > 1) { // Only show players with level > 1
+                leaderboard.add(new AbstractMap.SimpleEntry<>(entry.getKey(), level));
+            }
+        }
+        
+        // Sort by level descending
+        leaderboard.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
+        
+        if (leaderboard.isEmpty()) {
+            player.sendMessage("§cNo players found for " + skill.getDisplayName() + " leaderboard.");
+            return;
+        }
+        
+        int pageSize = 10;
+        int totalPages = (int) Math.ceil((double) leaderboard.size() / pageSize);
+        page = Math.max(1, Math.min(page, totalPages));
+        
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, leaderboard.size());
+        
+        player.sendMessage("§6§l=== " + skill.getIcon() + " " + skill.getDisplayName() + " Leaderboard ===");
+        player.sendMessage("§7Page §e" + page + "§7/§e" + totalPages);
+        player.sendMessage("");
+        
+        for (int i = start; i < end; i++) {
+            Map.Entry<UUID, Integer> entry = leaderboard.get(i);
+            UUID uuid = entry.getKey();
+            int level = entry.getValue();
+            
+            String playerName = "Unknown";
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+            if (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline()) {
+                playerName = offlinePlayer.getName();
+            }
+            
+            String rankColor = getRankColor(i + 1);
+            player.sendMessage(String.format("§7#%d %s%s §7- Level §e%d", 
+                i + 1, rankColor, playerName, level));
+        }
+    }
+    
+    private String getRankColor(int rank) {
+        if (rank == 1) return "§6§l"; // Gold for #1
+        if (rank == 2) return "§7§l"; // Silver for #2
+        if (rank == 3) return "§c§l"; // Bronze for #3
+        return "§f"; // White for others
     }
 }
 

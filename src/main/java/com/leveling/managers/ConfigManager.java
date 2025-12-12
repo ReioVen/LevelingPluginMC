@@ -65,10 +65,50 @@ public class ConfigManager {
         if (miningSection != null) {
             for (String key : miningSection.getKeys(false)) {
                 try {
-                    Material mat = Material.valueOf(key.toUpperCase());
+                    Material mat;
+                    String upperKey = key.toUpperCase();
+                    
+                    // Handle ore names - try with _ORE suffix first, then without
+                    if (upperKey.equals("STONE")) {
+                        mat = Material.STONE;
+                    } else if (upperKey.equals("COBBLESTONE")) {
+                        mat = Material.COBBLESTONE;
+                    } else if (upperKey.equals("DEEPSLATE")) {
+                        mat = Material.DEEPSLATE;
+                    } else if (upperKey.equals("COBBLED_DEEPSLATE")) {
+                        mat = Material.COBBLED_DEEPSLATE;
+                    } else {
+                        // Try with _ORE suffix first (for ores)
+                        try {
+                            mat = Material.valueOf(upperKey + "_ORE");
+                        } catch (IllegalArgumentException e1) {
+                            // Try without _ORE (for other blocks)
+                            try {
+                                mat = Material.valueOf(upperKey);
+                            } catch (IllegalArgumentException e2) {
+                                // Try DEEPSLATE variant
+                                try {
+                                    mat = Material.valueOf("DEEPSLATE_" + upperKey + "_ORE");
+                                } catch (IllegalArgumentException e3) {
+                                    throw new IllegalArgumentException("Material not found: " + key);
+                                }
+                            }
+                        }
+                    }
+                    
                     miningExp.put(mat, miningSection.getInt(key));
+                    
+                    // Also add deepslate variants for ores
+                    if (mat.name().contains("_ORE") && !mat.name().contains("DEEPSLATE")) {
+                        try {
+                            Material deepslateMat = Material.valueOf("DEEPSLATE_" + mat.name());
+                            miningExp.put(deepslateMat, miningSection.getInt(key));
+                        } catch (IllegalArgumentException e) {
+                            // Deepslate variant doesn't exist, skip
+                        }
+                    }
                 } catch (IllegalArgumentException e) {
-                    plugin.getLogger().warning("Invalid material in mining config: " + key);
+                    plugin.getLogger().warning("Invalid material in mining config: " + key + " - " + e.getMessage());
                 }
             }
         }

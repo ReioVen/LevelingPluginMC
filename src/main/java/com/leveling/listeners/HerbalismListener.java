@@ -41,10 +41,19 @@ public class HerbalismListener implements Listener {
             // Double drops per level (configurable)
             double doubleDropChance = level * plugin.getConfigManager().getHerbalismDoubleDropChancePerLevel();
             if (random.nextDouble() < doubleDropChance) {
-                ItemStack original = new ItemStack(material);
-                event.getBlock().getWorld().dropItemNaturally(
-                    event.getBlock().getLocation(), original
-                );
+                // Get the actual drops that will be given (respects silk touch, etc.)
+                ItemStack tool = player.getInventory().getItemInMainHand();
+                java.util.Collection<ItemStack> drops = block.getDrops(tool, player);
+                
+                for (ItemStack drop : drops) {
+                    if (drop != null && drop.getType() != Material.AIR) {
+                        // Drop a copy of what the player actually receives
+                        ItemStack extraDrop = drop.clone();
+                        block.getWorld().dropItemNaturally(
+                            block.getLocation(), extraDrop
+                        );
+                    }
+                }
             }
             
             // Auto replant at configured level

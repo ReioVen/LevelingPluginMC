@@ -12,12 +12,19 @@ experience:
 experience-gain:
   mining:
     stone: 5
-    coal: 8
-    iron: 10
-    gold: 12
-    diamond: 15
-    emerald: 20
-    netherite: 25
+    cobblestone: 3
+    deepslate: 5
+    cobbled_deepslate: 3
+    coal_ore: 8
+    iron_ore: 10
+    gold_ore: 12
+    diamond_ore: 15
+    emerald_ore: 20
+    lapis_ore: 10
+    redstone_ore: 8
+    nether_gold_ore: 10
+    nether_quartz_ore: 8
+    ancient_debris: 25
   herbalism:
     wheat: 3
     carrot: 3
@@ -53,6 +60,12 @@ experience-gain:
     podzol: 3
     coarse_dirt: 3
     rooted_dirt: 3
+    mud: 3
+    mud_bricks: 4
+    packed_mud: 3
+    snow_block: 2
+    snow: 1
+    muddy_mangrove_roots: 3
   combat:
     player: 20
     mob: 10

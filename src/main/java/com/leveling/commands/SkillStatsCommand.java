@@ -1,5 +1,6 @@
 package com.leveling.commands;
 
+import com.leveling.LevelingPlugin;
 import com.leveling.managers.ExperienceManager;
 import com.leveling.managers.SkillManager;
 import com.leveling.models.SkillType;
@@ -15,6 +16,10 @@ public class SkillStatsCommand implements CommandExecutor {
     public SkillStatsCommand(SkillManager skillManager, ExperienceManager experienceManager) {
         this.skillManager = skillManager;
         this.experienceManager = experienceManager;
+    }
+    
+    private LevelingPlugin getPlugin() {
+        return LevelingPlugin.getPlugin(LevelingPlugin.class);
     }
     
     @Override
@@ -40,18 +45,38 @@ public class SkillStatsCommand implements CommandExecutor {
             player.sendMessage("  §7Experience for Next Level: §b" + String.format("%.1f", expForNext));
             player.sendMessage("  §7Progress: §b" + String.format("%.1f", progress) + "%");
             
-            if (skill == SkillType.DEFENSE) {
-                // Show defense bonuses
-                double toughnessPercent = Math.min(25.0, level * 0.5); // 0.5% per level, max 25%
-                
-                player.sendMessage("  §7Bonuses:");
-                player.sendMessage("    §7+§9" + String.format("%.1f", toughnessPercent) + "% Armor Toughness");
+            // Show bonuses for each skill
+            player.sendMessage("  §7Bonuses:");
+            
+            LevelingPlugin plugin = getPlugin();
+            
+            if (skill == SkillType.MINING) {
+                double doubleDropPercent = Math.min(100.0, level * plugin.getConfigManager().getMiningDoubleDropChancePerLevel() * 100);
+                player.sendMessage("    §7+§a" + String.format("%.1f", doubleDropPercent) + "% Double Drop Chance");
+            } else if (skill == SkillType.EXCAVATION) {
+                double doubleDropPercent = Math.min(100.0, level * plugin.getConfigManager().getExcavationDoubleDropChancePerLevel() * 100);
+                player.sendMessage("    §7+§a" + String.format("%.1f", doubleDropPercent) + "% Double Drop Chance");
+            } else if (skill == SkillType.HERBALISM) {
+                double doubleDropPercent = Math.min(100.0, level * plugin.getConfigManager().getHerbalismDoubleDropChancePerLevel() * 100);
+                player.sendMessage("    §7+§a" + String.format("%.1f", doubleDropPercent) + "% Double Drop Chance");
+                int autoReplantLevel = plugin.getConfigManager().getHerbalismAutoReplantLevel();
+                if (level >= autoReplantLevel) {
+                    player.sendMessage("    §7+§aAuto Replant §7(enabled)");
+                } else {
+                    player.sendMessage("    §7+§aAuto Replant §7(level " + autoReplantLevel + "+)");
+                }
             } else if (skill == SkillType.COMBAT) {
-                // Show combat bonuses
                 double damagePercent = Math.min(25.0, level * 0.5); // 0.5% per level, max 25%
-                
-                player.sendMessage("  §7Bonuses:");
                 player.sendMessage("    §7+§c" + String.format("%.1f", damagePercent) + "% Attack Damage");
+            } else if (skill == SkillType.DEFENSE) {
+                double toughnessPercent = Math.min(25.0, level * 0.5); // 0.5% per level, max 25%
+                player.sendMessage("    §7+§9" + String.format("%.1f", toughnessPercent) + "% Armor Toughness");
+            } else if (skill == SkillType.ACROBATICS) {
+                double fallReductionPercent = Math.min(50.0, level * plugin.getConfigManager().getAcrobaticsDamageReductionPerLevel() * 100);
+                player.sendMessage("    §7+§b" + String.format("%.1f", fallReductionPercent) + "% Fall Damage Reduction");
+            } else if (skill == SkillType.SMITHING) {
+                double returnChance = level * plugin.getConfigManager().getSmithingResourceReturnChance() * 100;
+                player.sendMessage("    §7+§e" + String.format("%.2f", returnChance) + "% Resource Return Chance");
             }
             
             player.sendMessage("");
