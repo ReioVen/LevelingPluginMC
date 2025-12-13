@@ -28,7 +28,10 @@ public class SkillStatsGUI {
         Inventory gui = plugin.getServer().createInventory(null, 54, "§6§lDetailed Skill Statistics");
         
         SkillType[] skills = SkillType.values();
-        int[] skillSlots = {10, 11, 12, 13, 19, 20, 21, 22}; // Center slots
+        // Better centered slots for 8 skills in a 54-slot inventory (9x6)
+        // Row 2: slots 11, 12, 13, 14 (centered)
+        // Row 3: slots 20, 21, 22, 23 (centered)
+        int[] skillSlots = {11, 12, 13, 14, 20, 21, 22, 23}; // Better centered slots
         
         for (int i = 0; i < skills.length && i < skillSlots.length; i++) {
             SkillType skill = skills[i];

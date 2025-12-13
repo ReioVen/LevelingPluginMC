@@ -49,13 +49,14 @@ public class ExperienceManager {
                 // The new stored XP is the total XP minus what was required for the new level
                 double newStoredExp = totalExp - expForNextLevel;
                 
-                // Update level and stored experience
+                // Update level and stored experience (reset to excess XP after leveling)
                 data.setLevel(skill, currentLevel);
                 data.setExperience(skill, newStoredExp);
                 
-                // Update totalExp for next iteration (in case we can level up multiple times)
-                totalExp = newStoredExp;
+                // Recalculate totalExp for next iteration (in case we can level up multiple times)
+                // After leveling, the new totalExp is: storedExp + required for new level
                 expForCurrentLevel = expForNextLevel;
+                totalExp = newStoredExp + expForCurrentLevel;
                 
                 // Level up!
                 onLevelUp(player, skill, currentLevel);

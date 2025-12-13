@@ -84,11 +84,20 @@ public class GUIManager implements Listener {
         
         Player player = (Player) event.getWhoClicked();
         String title = event.getView().getTitle();
-        ItemStack clicked = event.getCurrentItem();
         
-        // Only handle clicks in our custom GUIs
+        // Only handle clicks in our custom GUIs - ALWAYS cancel to prevent item removal
         if (title.contains("Level") || title.contains("Leaderboard") || title.contains("Stats")) {
+            // Cancel ALL clicks in our GUIs, regardless of who clicks (including OPs)
             event.setCancelled(true);
+            
+            // Also prevent taking items from the GUI
+            if (event.getClickedInventory() != null && 
+                event.getClickedInventory().equals(event.getView().getTopInventory())) {
+                // Prevent all item movement from top inventory
+                event.setCancelled(true);
+            }
+            
+            ItemStack clicked = event.getCurrentItem();
             
             if (clicked == null || clicked.getType() == Material.AIR || clicked.getType() == Material.BLACK_STAINED_GLASS_PANE) {
                 return;
@@ -134,17 +143,28 @@ public class GUIManager implements Listener {
         // Extract skill from title
         SkillType skill = extractSkillFromTitle(title);
         
-        if (clicked.getType() == Material.ARROW && clicked.getItemMeta() != null) {
-            String displayName = clicked.getItemMeta().getDisplayName();
+        if (clicked == null || clicked.getItemMeta() == null) {
+            return;
+        }
+        
+        String displayName = clicked.getItemMeta().getDisplayName();
+        
+        if (clicked.getType() == Material.ARROW) {
             if (displayName.contains("Back")) {
                 new AllSkillsGUI(plugin, plugin.getSkillManager(), plugin.getExperienceManager()).openGUI(player);
             }
-        } else if (clicked.getType() == Material.PLAYER_HEAD && clicked.getItemMeta() != null) {
-            String displayName = clicked.getItemMeta().getDisplayName();
+        } else if (clicked.getType() == Material.PLAYER_HEAD) {
             if (displayName.contains("Leaderboard")) {
                 leaderboardSkills.put(player, skill);
                 leaderboardPages.put(player, 1);
                 new LeaderboardGUI(plugin, plugin.getSkillManager()).openGUI(player, skill, 1);
+            }
+        } else {
+            // Check if clicked on the skill item itself (could be any skill material)
+            SkillType clickedSkill = getSkillFromItem(clicked);
+            if (clickedSkill != null && clickedSkill == skill) {
+                // Clicked on the skill item - could refresh or do nothing
+                // For now, do nothing as it's just a display item
             }
         }
     }
@@ -154,8 +174,13 @@ public class GUIManager implements Listener {
         leaderboardSkills.put(player, skill);
         int currentPage = leaderboardPages.getOrDefault(player, 1);
         
-        if (clicked.getType() == Material.ARROW && clicked.getItemMeta() != null) {
-            String displayName = clicked.getItemMeta().getDisplayName();
+        if (clicked == null || clicked.getItemMeta() == null) {
+            return;
+        }
+        
+        String displayName = clicked.getItemMeta().getDisplayName();
+        
+        if (clicked.getType() == Material.ARROW) {
             if (displayName.contains("Previous")) {
                 int newPage = Math.max(1, currentPage - 1);
                 new LeaderboardGUI(plugin, plugin.getSkillManager()).openGUI(player, skill, newPage);
@@ -205,10 +230,11 @@ public class GUIManager implements Listener {
     
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-        // Prevent dragging items in our custom GUIs
-        if (event.getView().getTitle().contains("Level") || 
-            event.getView().getTitle().contains("Leaderboard") ||
-            event.getView().getTitle().contains("Stats")) {
+        // Prevent dragging items in our custom GUIs - applies to everyone including OPs
+        String title = event.getView().getTitle();
+        if (title.contains("Level") || 
+            title.contains("Leaderboard") ||
+            title.contains("Stats")) {
             event.setCancelled(true);
         }
     }
