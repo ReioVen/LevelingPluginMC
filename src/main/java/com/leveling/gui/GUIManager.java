@@ -85,8 +85,14 @@ public class GUIManager implements Listener {
         Player player = (Player) event.getWhoClicked();
         String title = event.getView().getTitle();
         
+        // Check if this is one of our custom GUIs
+        boolean isOurGUI = title.contains("Level") || 
+                          title.contains("Leaderboard") || 
+                          title.contains("Stats") ||
+                          title.contains("§6§l"); // Skill detail GUIs start with §6§l
+        
         // Only handle clicks in our custom GUIs - ALWAYS cancel to prevent item removal
-        if (title.contains("Level") || title.contains("Leaderboard") || title.contains("Stats")) {
+        if (isOurGUI) {
             // Cancel ALL clicks in our GUIs, regardless of who clicks (including OPs)
             event.setCancelled(true);
             
@@ -107,8 +113,8 @@ public class GUIManager implements Listener {
             if (title.equals("§6§lYour Skill Levels")) {
                 handleAllSkillsClick(player, clicked);
             }
-            // Handle Skill Detail GUI
-            else if (title.contains("§6§l") && title.contains("Leaderboard") == false) {
+            // Handle Skill Detail GUI - check if it's a skill detail (has icon and skill name, but not leaderboard)
+            else if (title.contains("§6§l") && !title.contains("Leaderboard") && !title.contains("Your Skill Levels") && !title.contains("Statistics")) {
                 handleSkillDetailClick(player, clicked, title);
             }
             // Handle Leaderboard GUI
@@ -149,23 +155,45 @@ public class GUIManager implements Listener {
         
         String displayName = clicked.getItemMeta().getDisplayName();
         
+        // Handle Back button (ARROW)
         if (clicked.getType() == Material.ARROW) {
-            if (displayName.contains("Back")) {
+            if (displayName.contains("Back") || displayName.contains("←")) {
                 new AllSkillsGUI(plugin, plugin.getSkillManager(), plugin.getExperienceManager()).openGUI(player);
+                return;
             }
-        } else if (clicked.getType() == Material.PLAYER_HEAD) {
-            if (displayName.contains("Leaderboard")) {
+        }
+        
+        // Handle Leaderboard button (PLAYER_HEAD)
+        if (clicked.getType() == Material.PLAYER_HEAD) {
+            if (displayName.contains("Leaderboard") || displayName.contains("View Leaderboard")) {
                 leaderboardSkills.put(player, skill);
                 leaderboardPages.put(player, 1);
                 new LeaderboardGUI(plugin, plugin.getSkillManager()).openGUI(player, skill, 1);
+                return;
             }
-        } else {
-            // Check if clicked on the skill item itself (could be any skill material)
-            SkillType clickedSkill = getSkillFromItem(clicked);
-            if (clickedSkill != null && clickedSkill == skill) {
-                // Clicked on the skill item - could refresh or do nothing
-                // For now, do nothing as it's just a display item
+        }
+        
+        // Handle Bonuses item (GOLDEN_APPLE)
+        if (clicked.getType() == Material.GOLDEN_APPLE) {
+            if (displayName.contains("Bonuses")) {
+                // Just a display item, do nothing
+                return;
             }
+        }
+        
+        // Handle progress bar items (EXPERIENCE_BOTTLE, GLASS_BOTTLE)
+        if (clicked.getType() == Material.EXPERIENCE_BOTTLE || clicked.getType() == Material.GLASS_BOTTLE) {
+            if (displayName.contains("Progress")) {
+                // Just a display item, do nothing
+                return;
+            }
+        }
+        
+        // Handle skill item click (could be any skill material)
+        SkillType clickedSkill = getSkillFromItem(clicked);
+        if (clickedSkill != null && clickedSkill == skill) {
+            // Clicked on the skill item - could refresh or do nothing
+            // For now, do nothing as it's just a display item
         }
     }
     
@@ -232,9 +260,11 @@ public class GUIManager implements Listener {
     public void onInventoryDrag(InventoryDragEvent event) {
         // Prevent dragging items in our custom GUIs - applies to everyone including OPs
         String title = event.getView().getTitle();
-        if (title.contains("Level") || 
-            title.contains("Leaderboard") ||
-            title.contains("Stats")) {
+        boolean isOurGUI = title.contains("Level") || 
+                          title.contains("Leaderboard") || 
+                          title.contains("Stats") ||
+                          title.contains("§6§l"); // Skill detail GUIs start with §6§l
+        if (isOurGUI) {
             event.setCancelled(true);
         }
     }

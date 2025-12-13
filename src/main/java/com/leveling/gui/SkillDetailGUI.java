@@ -99,12 +99,27 @@ public class SkillDetailGUI {
         
         for (int i = 0; i < slots.length; i++) {
             Material material = i < filledSlots ? Material.EXPERIENCE_BOTTLE : Material.GLASS_BOTTLE;
-            String name = i < filledSlots ? "§a█" : "§8█";
+            String name = i < filledSlots ? "§a█ Progress" : "§8█ Progress";
             
             ItemStack item = new ItemStack(material);
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 meta.setDisplayName(name);
+                
+                // Add lore to show progress information
+                List<String> lore = new ArrayList<>();
+                lore.add("§7");
+                lore.add("§7Progress Bar");
+                lore.add("§7");
+                if (i < filledSlots) {
+                    lore.add("§aFilled §7- Represents progress");
+                } else {
+                    lore.add("§8Empty §7- Remaining progress");
+                }
+                lore.add("§7");
+                lore.add("§7Current: §b" + String.format("%.1f", progress) + "%");
+                
+                meta.setLore(lore);
                 item.setItemMeta(meta);
             }
             gui.setItem(slots[i], item);
