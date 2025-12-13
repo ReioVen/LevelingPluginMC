@@ -9,6 +9,7 @@ A comprehensive Minecraft leveling system plugin for Paper/Spigot servers develo
 - **Level Cap**: All skills can level up to level 50
 - **Experience System**: Configurable experience requirements with exponential scaling
 - **HUD Display**: Real-time progress display above the hotbar showing level, percentage, and experience
+- **Interactive GUI System**: Beautiful chest-based GUIs for viewing skills, statistics, and leaderboards
 
 ### Skill Bonuses
 
@@ -52,13 +53,19 @@ A comprehensive Minecraft leveling system plugin for Paper/Spigot servers develo
 ### Commands
 
 #### Player Commands
-- `/level` - View all your skill levels
-- `/level <skill>` - View specific skill details (e.g., `/level MINING`)
-- `/level help` - Show help menu with all commands
-- `/levelstats` - View detailed statistics for all skills
-- `/leaderboard <skill> [page]` - View leaderboard for a skill
+- `/level` - Opens interactive GUI showing all your skill levels
+- `/level <skill>` - Opens detailed GUI for a specific skill (e.g., `/level MINING`)
+- `/level help` - Show help menu with all commands (chat only)
+- `/levelstats` - Opens detailed statistics GUI for all skills
+- `/leaderboard <skill> [page]` - Opens leaderboard GUI for a skill
   - Aliases: `/lb`, `/top`
   - Example: `/leaderboard mining 1`
+
+**Note**: All commands (except `/level help`) now open beautiful interactive GUIs instead of chat messages. GUIs feature:
+- Player heads for leaderboard entries
+- Clickable navigation between menus
+- Progress bars and visual indicators
+- Items cannot be removed from GUIs
 
 #### Admin Commands
 - `/level set <player> <skill> <level>` - Set a player's skill level (requires `leveling.admin` permission)
@@ -233,7 +240,18 @@ Data is automatically:
 
 ## 🔄 Version History
 
-### v1.0.1 (Latest)
+### v1.1.0 (Latest)
+- **NEW**: Complete GUI system overhaul - all commands now use interactive chest GUIs
+- **NEW**: All Skills GUI - beautiful overview of all 8 skills with clickable navigation
+- **NEW**: Skill Detail GUI - detailed view with progress bars, bonuses, and leaderboard access
+- **NEW**: Leaderboard GUI - displays player heads with rank, name, and level
+- **NEW**: Skill Stats GUI - comprehensive statistics view for all skills
+- **NEW**: Interactive navigation - click between menus seamlessly
+- **NEW**: Items cannot be removed from GUIs - fully protected inventory system
+- **NEW**: Black glass panes fill empty slots for a polished look
+- **Improved**: Only `/level help` remains as chat output, all other displays use GUIs
+
+### v1.0.1
 - **Fixed**: Experience percentage now correctly shows total XP percentage (e.g., 450/1000 = 45%) instead of consecutive farming amount
 - **Fixed**: Defense XP now only grants experience when player actually takes damage (not when hit but no damage due to friendly fire protection or other plugins)
 - **Added**: Copper ore now gives mining experience (8 XP, same as coal)

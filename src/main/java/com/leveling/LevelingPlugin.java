@@ -2,6 +2,7 @@ package com.leveling;
 
 import com.leveling.commands.SkillsCommand;
 import com.leveling.commands.SkillStatsCommand;
+import com.leveling.gui.GUIManager;
 import com.leveling.listeners.*;
 import com.leveling.managers.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,9 +38,12 @@ public class LevelingPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SmithingListener(this, experienceManager), this);
         getServer().getPluginManager().registerEvents(new AcrobaticsListener(this, experienceManager), this);
         
+        // Initialize GUI manager
+        new GUIManager(this);
+        
         // Register commands
         getCommand("level").setExecutor(new SkillsCommand(this, skillManager, experienceManager));
-        getCommand("levelstats").setExecutor(new com.leveling.commands.SkillStatsCommand(skillManager, experienceManager));
+        getCommand("levelstats").setExecutor(new SkillStatsCommand(this, skillManager, experienceManager));
         getCommand("leaderboard").setExecutor(new com.leveling.commands.LeaderboardCommand(this, skillManager));
         
         // Start HUD update task
