@@ -30,29 +30,45 @@ public class ExperienceManager {
         // Add experience
         data.addExperience(skill, amount);
         
-        // Check for level up
-        double currentExp = data.getExperience(skill);
-        double expForNextLevel = getExperienceRequired(currentLevel + 1);
+        // Check for level up - we need to compare TOTAL XP, not just stored XP
+        // Stored XP is the excess after leveling, so we need to add it to the current level's requirement
+        double storedExp = data.getExperience(skill);
+        double expForCurrentLevel = getExperienceRequired(currentLevel);
+        double totalExp = storedExp + expForCurrentLevel;
         
-        while (currentExp >= expForNextLevel && currentLevel < maxLevel) {
-            currentLevel++;
-            currentExp -= expForNextLevel;
-            data.setLevel(skill, currentLevel);
-            data.setExperience(skill, currentExp);
+        // Keep leveling up as long as we have enough total XP
+        while (currentLevel < maxLevel) {
+            double expForNextLevel = getExperienceRequired(currentLevel + 1);
             
-            // Level up!
-            onLevelUp(player, skill, currentLevel);
-            
-            // Update bonuses if defense or combat leveled up
-            if (skill == SkillType.DEFENSE) {
-                skillManager.updateDefenseBonuses(player);
-            } else if (skill == SkillType.COMBAT) {
-                skillManager.updateCombatBonuses(player);
-            }
-            
-            // Check if we can level up again
-            if (currentLevel < maxLevel) {
-                expForNextLevel = getExperienceRequired(currentLevel + 1);
+            // Check if total XP is greater than or equal to the next level requirement
+            if (totalExp >= expForNextLevel) {
+                // Level up!
+                currentLevel++;
+                
+                // Calculate new stored XP (excess after leveling)
+                // The new stored XP is the total XP minus what was required for the new level
+                double newStoredExp = totalExp - expForNextLevel;
+                
+                // Update level and stored experience
+                data.setLevel(skill, currentLevel);
+                data.setExperience(skill, newStoredExp);
+                
+                // Update totalExp for next iteration (in case we can level up multiple times)
+                totalExp = newStoredExp;
+                expForCurrentLevel = expForNextLevel;
+                
+                // Level up!
+                onLevelUp(player, skill, currentLevel);
+                
+                // Update bonuses if defense or combat leveled up
+                if (skill == SkillType.DEFENSE) {
+                    skillManager.updateDefenseBonuses(player);
+                } else if (skill == SkillType.COMBAT) {
+                    skillManager.updateCombatBonuses(player);
+                }
+            } else {
+                // Not enough XP to level up, break the loop
+                break;
             }
         }
     }
