@@ -95,18 +95,18 @@ skill-bonuses:
   
   # Excavation bonuses
   excavation:
-    double-drop-chance-per-level: 0.01  # 1% per level
+    double-drop-chance-per-level: 0.005  # 0.5% per level (reduced from 1%)
     rare-drops:
       diamond:
-        level-10: 0.01  # 1% chance at level 10+
-        level-20: 0.02  # 2% chance at level 20+
-        level-30: 0.03  # 3% chance at level 30+
-        level-40: 0.05  # 5% chance at level 40+
-        level-50: 0.07  # 7% chance at level 50
+        level-10: 0.003  # 0.3% chance at level 10+ (reduced from 1%)
+        level-20: 0.005  # 0.5% chance at level 20+ (reduced from 2%)
+        level-30: 0.01  # 1% chance at level 30+ (reduced from 3%)
+        level-40: 0.015  # 1.5% chance at level 40+ (reduced from 5%)
+        level-50: 0.02  # 2% chance at level 50 (reduced from 7%)
       gold:
-        level-40: 0.02  # 2% Gold Ingot chance at level 40+
+        level-40: 0.005  # 0.5% Gold Ingot chance at level 40+ (reduced from 2%)
       netherite:
-        level-50: 0.03  # 3% Netherite Scrap chance at level 50
+        level-50: 0.01  # 1% Netherite Scrap chance at level 50 (reduced from 3%)
   
   # Farming bonuses
   farming:

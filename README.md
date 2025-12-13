@@ -7,7 +7,7 @@ A comprehensive Minecraft leveling system plugin for Paper/Spigot servers develo
 ### Skills System
 - **8 Unique Skills**: Mining, Excavation, Woodcutting, Combat, Defense, Farming, Smithing, and Acrobatics
 - **Level Cap**: All skills can level up to level 50
-- **Experience System**: Configurable experience requirements with exponential scaling
+- **Experience System**: Non-cumulative XP system - XP resets to 0 on level up, each level requires progressively more XP
 - **HUD Display**: Real-time progress display above the hotbar showing level, percentage, and experience
 - **Interactive GUI System**: Beautiful chest-based GUIs for viewing skills, statistics, and leaderboards
 
@@ -17,14 +17,14 @@ A comprehensive Minecraft leveling system plugin for Paper/Spigot servers develo
 - **2% double drop chance per level** (works with Fortune enchantment)
 - Higher levels = more valuable drops
 
-#### Excavation (NEW!)
-- **1% double drop chance per level**
-- **Special Drops**:
-  - Level 10+: 1% Diamond drop chance
-  - Level 20+: 2% Diamond drop chance
-  - Level 30+: 3% Diamond drop chance
-  - Level 40+: 5% Diamond + 2% Gold Ingot drop chance
-  - Level 50: 7% Diamond + 3% Netherite Scrap drop chance
+#### Excavation
+- **0.5% double drop chance per level** (reduced for better balance)
+- **Special Drops** (reduced drop rates):
+  - Level 10+: 0.3% Diamond drop chance
+  - Level 20+: 0.5% Diamond drop chance
+  - Level 30+: 1% Diamond drop chance
+  - Level 40+: 1.5% Diamond + 0.5% Gold Ingot drop chance
+  - Level 50: 2% Diamond + 1% Netherite Scrap drop chance
 
 #### Farming
 - **2% double drop chance per level**
@@ -104,6 +104,12 @@ experience:
   multiplier: 1.5
 ```
 
+**Note**: The experience system uses a non-cumulative approach:
+- XP resets to 0 when you level up (no excess XP carried over)
+- Each level requires progressively more XP (formula: `base * (level ^ multiplier)`)
+- Example: Level 2 requires ~283 XP, Level 3 requires ~520 XP, Level 4 requires ~800 XP
+- This makes leveling progressively harder and more challenging
+
 ### Skill Experience Gains
 Configure experience gained for each action in `experience-gain` section:
 - Mining: Stone, deepslate, cobblestone, cobbled deepslate, coal ore, **copper ore**, iron ore, gold ore, diamond ore, emerald ore, lapis ore, redstone ore, nether gold ore, nether quartz ore, ancient debris
@@ -175,7 +181,7 @@ Make sure to update the Java path in `build.bat` if needed.
 | Skill | Icon | How to Level | Special Features |
 |-------|------|--------------|------------------|
 | **Mining** | ⛏ | Break ores | 2% double drops per level |
-| **Excavation** | ⛏ | Break dirt/sand/gravel | 1% double drops + special drops at higher levels |
+| **Excavation** | ⛏ | Break dirt/sand/gravel | 0.5% double drops + rare special drops at higher levels |
 | **Woodcutting** | 🪓 | Break logs | Standard progression |
 | **Combat** | ⚔ | Kill mobs/players | 0.5% damage per level (max 25%) |
 | **Defense** | 🛡 | Take damage/PvP kills | 0.5% toughness per level (max 25%) |
@@ -240,7 +246,17 @@ Data is automatically:
 
 ## 🔄 Version History
 
-### v1.1.1 (Latest)
+### v1.2.0 (Latest)
+- **NEW**: Non-cumulative experience system - XP resets to 0 on level up for more challenging progression
+- **NEW**: Each level now requires progressively more XP (formula: `base * (level ^ multiplier)`)
+- **BALANCED**: Reduced excavation drop chances for better game balance:
+  - Double drop chance: 1% → 0.5% per level
+  - Diamond drops: Reduced by 60-75% across all levels
+  - Gold ingot: 2% → 0.5% at level 40+
+  - Netherite scrap: 3% → 1% at level 50
+- **IMPROVED**: Leveling system now makes each level progressively harder
+
+### v1.1.1
 - **Fixed**: Level-up bug - now correctly compares total XP instead of stored XP when checking for level ups
 - **Fixed**: Multiple level-ups now work correctly when gaining large amounts of XP at once
 - **Fixed**: Fall damage no longer gives defense XP (only levels up acrobatics skill)
