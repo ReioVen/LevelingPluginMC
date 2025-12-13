@@ -29,6 +29,11 @@ public class DefenseListener implements Listener {
         
         Player player = (Player) event.getEntity();
         
+        // Don't give defense XP for fall damage (that's for acrobatics skill)
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            return;
+        }
+        
         // Only give XP if player actually takes damage (not blocked by plugins)
         // Check if the damage was cancelled or if final damage is 0
         if (event.isCancelled() || event.getFinalDamage() <= 0) {
