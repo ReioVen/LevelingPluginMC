@@ -131,6 +131,19 @@ public class ExcavationListener implements Listener {
                     event.getBlock().getLocation(), new ItemStack(Material.NETHERITE_SCRAP)
                 );
             }
+            
+            // XP drop at max level (3% chance, 10 XP)
+            double xpDropChance = plugin.getConfigManager().getExcavationXPDropChance50();
+            if (random.nextDouble() < xpDropChance) {
+                int xpAmount = plugin.getConfigManager().getExcavationXPDropAmount50();
+                // Drop experience orbs
+                org.bukkit.entity.ExperienceOrb orb = (org.bukkit.entity.ExperienceOrb) 
+                    event.getBlock().getWorld().spawn(
+                        event.getBlock().getLocation(),
+                        org.bukkit.entity.ExperienceOrb.class
+                    );
+                orb.setExperience(xpAmount);
+            }
         }
     }
     

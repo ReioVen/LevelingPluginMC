@@ -11,21 +11,24 @@ experience:
 # Experience gained per action
 experience-gain:
   mining:
+    # Basic blocks
     stone: 5
     cobblestone: 3
     deepslate: 5
     cobbled_deepslate: 3
-    coal_ore: 8
-    copper_ore: 8
-    iron_ore: 10
-    gold_ore: 12
-    diamond_ore: 15
-    emerald_ore: 20
-    lapis_ore: 10
-    redstone_ore: 8
-    nether_gold_ore: 10
-    nether_quartz_ore: 8
-    ancient_debris: 25
+    # Overworld ores (deepslate variants auto-added by plugin) - 2x XP
+    coal_ore: 16
+    copper_ore: 16
+    iron_ore: 20
+    gold_ore: 24
+    diamond_ore: 30
+    emerald_ore: 40
+    lapis_ore: 20
+    redstone_ore: 16
+    # Nether ores - 2x XP
+    nether_gold_ore: 20  # Gives mining XP when mining gold nugget blocks in nether
+    nether_quartz_ore: 24
+    ancient_debris: 300  # Highest XP reward for rarest ore
   farming:
     # Crops
     wheat: 3
@@ -98,15 +101,19 @@ skill-bonuses:
     double-drop-chance-per-level: 0.005  # 0.5% per level (reduced from 1%)
     rare-drops:
       diamond:
-        level-10: 0.003  # 0.3% chance at level 10+ (reduced from 1%)
-        level-20: 0.005  # 0.5% chance at level 20+ (reduced from 2%)
-        level-30: 0.01  # 1% chance at level 30+ (reduced from 3%)
-        level-40: 0.015  # 1.5% chance at level 40+ (reduced from 5%)
-        level-50: 0.02  # 2% chance at level 50 (reduced from 7%)
+        level-10: 0.0021  # 0.21% chance at level 10+ (reduced by 30%)
+        level-20: 0.0035  # 0.35% chance at level 20+ (reduced by 30%)
+        level-30: 0.007  # 0.7% chance at level 30+ (reduced by 30%)
+        level-40: 0.0105  # 1.05% chance at level 40+ (reduced by 30%)
+        level-50: 0.014  # 1.4% chance at level 50 (reduced by 30%)
       gold:
         level-40: 0.005  # 0.5% Gold Ingot chance at level 40+ (reduced from 2%)
       netherite:
         level-50: 0.01  # 1% Netherite Scrap chance at level 50 (reduced from 3%)
+    # XP drop at max level
+    xp-drop-level-50:
+      chance: 0.03  # 3% chance to drop XP at level 50
+      amount: 10  # 10 XP per drop
   
   # Farming bonuses
   farming:

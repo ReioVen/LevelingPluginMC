@@ -147,6 +147,26 @@ public class SkillDetailGUI {
                 case EXCAVATION:
                     double excavationPercent = Math.min(100.0, level * plugin.getConfigManager().getExcavationDoubleDropChancePerLevel() * 100);
                     lore.add("§7+§a" + String.format("%.1f", excavationPercent) + "% Double Drop Chance");
+                    lore.add("§7");
+                    // Diamond drop chances
+                    if (level >= 10) {
+                        double diamondChance = getDiamondChance(level, plugin) * 100;
+                        lore.add("§7+§b" + String.format("%.2f", diamondChance) + "% Diamond Drop Chance");
+                    }
+                    // Gold drop chance
+                    if (level >= 40) {
+                        double goldChance = plugin.getConfigManager().getExcavationGoldChance40() * 100;
+                        lore.add("§7+§6" + String.format("%.2f", goldChance) + "% Gold Ingot Drop Chance");
+                    }
+                    // Netherite drop chance
+                    if (level >= 50) {
+                        double netheriteChance = plugin.getConfigManager().getExcavationNetheriteChance50() * 100;
+                        lore.add("§7+§5" + String.format("%.2f", netheriteChance) + "% Netherite Scrap Drop Chance");
+                        // XP drop chance
+                        double xpDropChance = plugin.getConfigManager().getExcavationXPDropChance50() * 100;
+                        int xpAmount = plugin.getConfigManager().getExcavationXPDropAmount50();
+                        lore.add("§7+§e" + String.format("%.2f", xpDropChance) + "% XP Drop Chance (§b" + xpAmount + " XP§7)");
+                    }
                     break;
                 case FARMING:
                     double farmingPercent = Math.min(100.0, level * plugin.getConfigManager().getFarmingDoubleDropChancePerLevel() * 100);
@@ -185,6 +205,15 @@ public class SkillDetailGUI {
         return item;
     }
     
+    private double getDiamondChance(int level, LevelingPlugin plugin) {
+        if (level >= 50) return plugin.getConfigManager().getExcavationDiamondChance50();
+        if (level >= 40) return plugin.getConfigManager().getExcavationDiamondChance40();
+        if (level >= 30) return plugin.getConfigManager().getExcavationDiamondChance30();
+        if (level >= 20) return plugin.getConfigManager().getExcavationDiamondChance20();
+        if (level >= 10) return plugin.getConfigManager().getExcavationDiamondChance10();
+        return 0.0;
+    }
+    
     private Material getSkillMaterial(SkillType skill) {
         switch (skill) {
             case MINING:
@@ -208,6 +237,8 @@ public class SkillDetailGUI {
         }
     }
 }
+
+
 
 
 

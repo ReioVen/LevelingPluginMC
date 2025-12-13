@@ -40,13 +40,15 @@ public class ConfigManager {
     private double smithingResourceReturnChance; // 0.2% chance
     
     // Excavation rare drops
-    private double excavationDiamondChance10; // 1% at level 10
-    private double excavationDiamondChance20; // 2% at level 20
-    private double excavationDiamondChance30; // 3% at level 30
-    private double excavationDiamondChance40; // 5% at level 40
-    private double excavationDiamondChance50; // 7% at level 50
+    private double excavationDiamondChance10; // 0.21% at level 10
+    private double excavationDiamondChance20; // 0.35% at level 20
+    private double excavationDiamondChance30; // 0.7% at level 30
+    private double excavationDiamondChance40; // 1.05% at level 40
+    private double excavationDiamondChance50; // 1.4% at level 50
     private double excavationGoldChance40; // 2% at level 40+
     private double excavationNetheriteChance50; // 3% at level 50
+    private double excavationXPDropChance50; // 3% chance at level 50
+    private int excavationXPDropAmount50; // 10 XP per drop
     
     public ConfigManager(LevelingPlugin plugin) {
         this.plugin = plugin;
@@ -278,14 +280,17 @@ public class ConfigManager {
         // Smithing bonuses
         smithingResourceReturnChance = config.getDouble("skill-bonuses.smithing.resource-return-chance", 0.002); // 0.2% chance
         
-        // Excavation rare drops
-        excavationDiamondChance10 = config.getDouble("skill-bonuses.excavation.rare-drops.diamond.level-10", 0.01); // 1%
-        excavationDiamondChance20 = config.getDouble("skill-bonuses.excavation.rare-drops.diamond.level-20", 0.02); // 2%
-        excavationDiamondChance30 = config.getDouble("skill-bonuses.excavation.rare-drops.diamond.level-30", 0.03); // 3%
-        excavationDiamondChance40 = config.getDouble("skill-bonuses.excavation.rare-drops.diamond.level-40", 0.05); // 5%
-        excavationDiamondChance50 = config.getDouble("skill-bonuses.excavation.rare-drops.diamond.level-50", 0.07); // 7%
+        // Excavation rare drops (reduced by 30%)
+        excavationDiamondChance10 = config.getDouble("skill-bonuses.excavation.rare-drops.diamond.level-10", 0.0021); // 0.21%
+        excavationDiamondChance20 = config.getDouble("skill-bonuses.excavation.rare-drops.diamond.level-20", 0.0035); // 0.35%
+        excavationDiamondChance30 = config.getDouble("skill-bonuses.excavation.rare-drops.diamond.level-30", 0.007); // 0.7%
+        excavationDiamondChance40 = config.getDouble("skill-bonuses.excavation.rare-drops.diamond.level-40", 0.0105); // 1.05%
+        excavationDiamondChance50 = config.getDouble("skill-bonuses.excavation.rare-drops.diamond.level-50", 0.014); // 1.4%
         excavationGoldChance40 = config.getDouble("skill-bonuses.excavation.rare-drops.gold.level-40", 0.02); // 2%
         excavationNetheriteChance50 = config.getDouble("skill-bonuses.excavation.rare-drops.netherite.level-50", 0.03); // 3%
+        // XP drop at max level
+        excavationXPDropChance50 = config.getDouble("skill-bonuses.excavation.xp-drop-level-50.chance", 0.03); // 3%
+        excavationXPDropAmount50 = config.getInt("skill-bonuses.excavation.xp-drop-level-50.amount", 10); // 10 XP
     }
     
     public int getMaxLevel() {
@@ -416,6 +421,14 @@ public class ConfigManager {
     
     public double getExcavationNetheriteChance50() {
         return excavationNetheriteChance50;
+    }
+    
+    public double getExcavationXPDropChance50() {
+        return excavationXPDropChance50;
+    }
+    
+    public int getExcavationXPDropAmount50() {
+        return excavationXPDropAmount50;
     }
 }
 

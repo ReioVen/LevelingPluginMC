@@ -15,16 +15,19 @@ A comprehensive Minecraft leveling system plugin for Paper/Spigot servers develo
 
 #### Mining
 - **2% double drop chance per level** (works with Fortune enchantment)
+- **Doubled Ore XP**: All ores now give 2x experience for faster leveling
+- **Ancient Debris**: Gives 300 XP (highest reward for rarest ore)
+- **All 1.21.1 Ores Supported**: Including deepslate variants, nether gold ore, and nether quartz ore
 - Higher levels = more valuable drops
 
 #### Excavation
 - **0.5% double drop chance per level** (reduced for better balance)
-- **Special Drops** (reduced drop rates):
-  - Level 10+: 0.3% Diamond drop chance
-  - Level 20+: 0.5% Diamond drop chance
-  - Level 30+: 1% Diamond drop chance
-  - Level 40+: 1.5% Diamond + 0.5% Gold Ingot drop chance
-  - Level 50: 2% Diamond + 1% Netherite Scrap drop chance
+- **Special Drops** (balanced drop rates):
+  - Level 10+: 0.21% Diamond drop chance
+  - Level 20+: 0.35% Diamond drop chance
+  - Level 30+: 0.7% Diamond drop chance
+  - Level 40+: 1.05% Diamond + 0.5% Gold Ingot drop chance
+  - Level 50: 1.4% Diamond + 1% Netherite Scrap + 3% XP Drop (10 XP) chance
 
 #### Farming
 - **2% double drop chance per level**
@@ -181,7 +184,7 @@ Make sure to update the Java path in `build.bat` if needed.
 | Skill | Icon | How to Level | Special Features |
 |-------|------|--------------|------------------|
 | **Mining** | ⛏ | Break ores | 2% double drops per level |
-| **Excavation** | ⛏ | Break dirt/sand/gravel | 0.5% double drops + rare special drops at higher levels |
+| **Excavation** | ⛏ | Break dirt/sand/gravel | 0.5% double drops + rare special drops + XP drops at level 50 |
 | **Woodcutting** | 🪓 | Break logs | Standard progression |
 | **Combat** | ⚔ | Kill mobs/players | 0.5% damage per level (max 25%) |
 | **Defense** | 🛡 | Take damage/PvP kills | 0.5% toughness per level (max 25%) |
@@ -246,7 +249,16 @@ Data is automatically:
 
 ## 🔄 Version History
 
-### v1.2.0 (Latest)
+### v1.3.0 (Latest)
+- **NEW**: Excavation XP drops at max level - 3% chance to drop 10 XP experience orbs at level 50
+- **NEW**: Boost display in GUI - Shows current diamond drop chances and all bonuses in skill detail GUI
+- **BALANCED**: Diamond drop chances reduced by 30% across all excavation levels
+- **IMPROVED**: Mining experience doubled for all ores (2x XP)
+- **IMPROVED**: Ancient Debris now gives 300 XP (highest reward)
+- **IMPROVED**: All 1.21.1 ores supported including deepslate variants, nether gold ore, and nether quartz ore
+- **IMPROVED**: Skill bonuses now displayed with exact percentages in GUI
+
+### v1.2.0
 - **NEW**: Non-cumulative experience system - XP resets to 0 on level up for more challenging progression
 - **NEW**: Each level now requires progressively more XP (formula: `base * (level ^ multiplier)`)
 - **BALANCED**: Reduced excavation drop chances for better game balance:
