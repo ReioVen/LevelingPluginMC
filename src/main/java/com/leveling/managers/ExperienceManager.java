@@ -30,33 +30,25 @@ public class ExperienceManager {
         // Add experience
         data.addExperience(skill, amount);
         
-        // Check for level up - we need to compare TOTAL XP, not just stored XP
-        // Stored XP is the excess after leveling, so we need to add it to the current level's requirement
+        // Get current stored XP (starts at 0 for each level)
         double storedExp = data.getExperience(skill);
-        double expForCurrentLevel = getExperienceRequired(currentLevel);
-        double totalExp = storedExp + expForCurrentLevel;
         
-        // Keep leveling up as long as we have enough total XP
+        // Keep leveling up as long as we have enough XP for the next level
         while (currentLevel < maxLevel) {
+            // Get XP required for the next level (non-cumulative, specific to this level)
             double expForNextLevel = getExperienceRequired(currentLevel + 1);
             
-            // Check if total XP is greater than or equal to the next level requirement
-            if (totalExp >= expForNextLevel) {
+            // Check if we have enough XP to level up
+            if (storedExp >= expForNextLevel) {
                 // Level up!
                 currentLevel++;
                 
-                // Calculate new stored XP (excess after leveling)
-                // The new stored XP is the total XP minus what was required for the new level
-                double newStoredExp = totalExp - expForNextLevel;
-                
-                // Update level and stored experience (reset to excess XP after leveling)
+                // Reset XP to 0 (no excess XP carried over)
                 data.setLevel(skill, currentLevel);
-                data.setExperience(skill, newStoredExp);
+                data.setExperience(skill, 0.0);
                 
-                // Recalculate totalExp for next iteration (in case we can level up multiple times)
-                // After leveling, the new totalExp is: storedExp + required for new level
-                expForCurrentLevel = expForNextLevel;
-                totalExp = newStoredExp + expForCurrentLevel;
+                // Update storedExp to 0 for next iteration check
+                storedExp = 0.0;
                 
                 // Level up!
                 onLevelUp(player, skill, currentLevel);
@@ -84,9 +76,17 @@ public class ExperienceManager {
         // Bukkit.getPluginManager().callEvent(new SkillLevelUpEvent(player, skill, newLevel));
     }
     
+    /**
+     * Get experience required for a specific level (non-cumulative).
+     * Each level requires progressively more XP.
+     * Formula: base * (level ^ multiplier)
+     * Example: Level 2 needs base * (2^multiplier), Level 3 needs base * (3^multiplier), etc.
+     */
     public double getExperienceRequired(int level) {
         if (level <= 1) return 0;
-        return config.getBaseExp() * Math.pow(level - 1, config.getExpMultiplier());
+        // Non-cumulative: each level requires base * (level ^ multiplier)
+        // This makes each level progressively harder
+        return config.getBaseExp() * Math.pow(level, config.getExpMultiplier());
     }
     
     public double getExperienceForNextLevel(Player player, SkillType skill) {
@@ -95,12 +95,13 @@ public class ExperienceManager {
         if (currentLevel >= config.getMaxLevel()) {
             return 0;
         }
-        // Return the total XP needed for next level (not just the difference)
+        // Return the XP needed for the next level (non-cumulative)
         return getExperienceRequired(currentLevel + 1);
     }
     
     /**
-     * Get experience needed to reach next level (difference between current and next level)
+     * Get experience needed to reach next level.
+     * Since XP resets to 0 on level up, this is just the XP required for the next level.
      */
     public double getExperienceNeededForNextLevel(Player player, SkillType skill) {
         PlayerSkillData data = skillManager.getPlayerData(player);
@@ -108,9 +109,8 @@ public class ExperienceManager {
         if (currentLevel >= config.getMaxLevel()) {
             return 0;
         }
-        double expForNextLevel = getExperienceRequired(currentLevel + 1);
-        double expForCurrentLevel = getExperienceRequired(currentLevel);
-        return expForNextLevel - expForCurrentLevel;
+        // XP resets to 0 on level up, so we just need the XP for the next level
+        return getExperienceRequired(currentLevel + 1);
     }
     
     public double getProgressPercentage(Player player, SkillType skill) {
@@ -120,35 +120,27 @@ public class ExperienceManager {
             return 100.0;
         }
         
-        // Calculate total XP: stored XP (excess after leveling) + XP required for current level
+        // Get current stored XP (starts at 0 for each level)
         double storedExp = data.getExperience(skill);
-        double expForCurrentLevel = getExperienceRequired(currentLevel);
-        double totalExp = storedExp + expForCurrentLevel;
         
-        // Calculate XP needed for next level
+        // Get XP needed for next level (non-cumulative)
         double expForNextLevel = getExperienceRequired(currentLevel + 1);
-        double expNeeded = expForNextLevel - expForCurrentLevel;
         
-        if (expNeeded <= 0) return 100.0;
+        if (expForNextLevel <= 0) return 100.0;
         
-        // Calculate progress: how much exp we have towards the next level
-        double expProgress = totalExp - expForCurrentLevel;
-        if (expProgress < 0) expProgress = 0;
-        
-        // Calculate percentage: (current XP in this level / XP needed for this level) * 100
-        double percentage = (expProgress / expNeeded) * 100.0;
+        // Calculate percentage: (current XP / XP needed for next level) * 100
+        double percentage = (storedExp / expForNextLevel) * 100.0;
         return Math.min(100.0, Math.max(0.0, percentage));
     }
     
     /**
-     * Get total experience for a skill (stored + required for current level)
+     * Get total experience for a skill.
+     * Since XP resets to 0 on level up, this returns the current stored XP for the current level.
      */
     public double getTotalExperience(Player player, SkillType skill) {
         PlayerSkillData data = skillManager.getPlayerData(player);
-        int currentLevel = data.getLevel(skill);
-        double storedExp = data.getExperience(skill);
-        double expForCurrentLevel = getExperienceRequired(currentLevel);
-        return storedExp + expForCurrentLevel;
+        // XP resets to 0 on level up, so total XP is just the stored XP for current level
+        return data.getExperience(skill);
     }
 }
 
