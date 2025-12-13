@@ -240,7 +240,13 @@ Data is automatically:
 
 ## 🔄 Version History
 
-### v1.1.0 (Latest)
+### v1.1.1 (Latest)
+- **Fixed**: Level-up bug - now correctly compares total XP instead of stored XP when checking for level ups
+- **Fixed**: Multiple level-ups now work correctly when gaining large amounts of XP at once
+- **Fixed**: Fall damage no longer gives defense XP (only levels up acrobatics skill)
+- **Improved**: Defense XP now only comes from combat damage and PvP kills
+
+### v1.1.0
 - **NEW**: Complete GUI system overhaul - all commands now use interactive chest GUIs
 - **NEW**: All Skills GUI - beautiful overview of all 8 skills with clickable navigation
 - **NEW**: Skill Detail GUI - detailed view with progress bars, bonuses, and leaderboard access
