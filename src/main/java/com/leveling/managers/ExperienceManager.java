@@ -78,7 +78,22 @@ public class ExperienceManager {
         if (currentLevel >= config.getMaxLevel()) {
             return 0;
         }
+        // Return the total XP needed for next level (not just the difference)
         return getExperienceRequired(currentLevel + 1);
+    }
+    
+    /**
+     * Get experience needed to reach next level (difference between current and next level)
+     */
+    public double getExperienceNeededForNextLevel(Player player, SkillType skill) {
+        PlayerSkillData data = skillManager.getPlayerData(player);
+        int currentLevel = data.getLevel(skill);
+        if (currentLevel >= config.getMaxLevel()) {
+            return 0;
+        }
+        double expForNextLevel = getExperienceRequired(currentLevel + 1);
+        double expForCurrentLevel = getExperienceRequired(currentLevel);
+        return expForNextLevel - expForCurrentLevel;
     }
     
     public double getProgressPercentage(Player player, SkillType skill) {
@@ -88,19 +103,35 @@ public class ExperienceManager {
             return 100.0;
         }
         
-        double currentExp = data.getExperience(skill);
-        double expForNextLevel = getExperienceRequired(currentLevel + 1);
+        // Calculate total XP: stored XP (excess after leveling) + XP required for current level
+        double storedExp = data.getExperience(skill);
         double expForCurrentLevel = getExperienceRequired(currentLevel);
+        double totalExp = storedExp + expForCurrentLevel;
+        
+        // Calculate XP needed for next level
+        double expForNextLevel = getExperienceRequired(currentLevel + 1);
         double expNeeded = expForNextLevel - expForCurrentLevel;
         
         if (expNeeded <= 0) return 100.0;
         
         // Calculate progress: how much exp we have towards the next level
-        double expProgress = currentExp - expForCurrentLevel;
+        double expProgress = totalExp - expForCurrentLevel;
         if (expProgress < 0) expProgress = 0;
         
+        // Calculate percentage: (current XP in this level / XP needed for this level) * 100
         double percentage = (expProgress / expNeeded) * 100.0;
         return Math.min(100.0, Math.max(0.0, percentage));
+    }
+    
+    /**
+     * Get total experience for a skill (stored + required for current level)
+     */
+    public double getTotalExperience(Player player, SkillType skill) {
+        PlayerSkillData data = skillManager.getPlayerData(player);
+        int currentLevel = data.getLevel(skill);
+        double storedExp = data.getExperience(skill);
+        double expForCurrentLevel = getExperienceRequired(currentLevel);
+        return storedExp + expForCurrentLevel;
     }
 }
 

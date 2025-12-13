@@ -84,8 +84,8 @@ public class HUDManager {
         
         int level = skillManager.getLevel(player, skill);
         double progress = experienceManager.getProgressPercentage(player, skill);
+        double totalExp = experienceManager.getTotalExperience(player, skill);
         double expForNext = experienceManager.getExperienceForNextLevel(player, skill);
-        double currentExp = skillManager.getExperience(player, skill);
         
         // Format progress bar
         int barLength = 20;
@@ -101,14 +101,14 @@ public class HUDManager {
         }
         progressBar.append("§7]");
         
-        // Create HUD message
+        // Create HUD message - show total XP and percentage
         String message = String.format(
             "§6%s %s §7Level §e%d §7(§b%.1f%%§7) §8| §7Exp: §b%.0f§7/§b%.0f",
             skill.getIcon(),
             skill.getDisplayName(),
             level,
             progress,
-            currentExp,
+            totalExp,
             expForNext
         );
         

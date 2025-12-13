@@ -99,13 +99,12 @@ experience:
 
 ### Skill Experience Gains
 Configure experience gained for each action in `experience-gain` section:
-- Mining: Stone, coal, iron, gold, diamond, emerald, netherite
+- Mining: Stone, deepslate, cobblestone, cobbled deepslate, coal ore, **copper ore**, iron ore, gold ore, diamond ore, emerald ore, lapis ore, redstone ore, nether gold ore, nether quartz ore, ancient debris
 - Excavation: Dirt, grass, sand, gravel, clay, etc.
 - Farming: Crops (wheat, carrot, potato, beetroot, nether wart), plants (pumpkin, melon, sugarcane, cactus, etc.), and animal breeding
 - Woodcutting: All log types
 - Combat: Player kills and mob kills
-- Defense: Damage taken and PvP kills
-- Farming: Animal breeding and crop harvesting
+- Defense: **Actual damage taken** (not blocked hits) and PvP kills
 - Smithing: Item crafting
 - Acrobatics: Fall damage
 
@@ -233,6 +232,13 @@ Data is automatically:
 - Ensure you have the required skill levels
 
 ## 🔄 Version History
+
+### v1.0.1 (Latest)
+- **Fixed**: Experience percentage now correctly shows total XP percentage (e.g., 450/1000 = 45%) instead of consecutive farming amount
+- **Fixed**: Defense XP now only grants experience when player actually takes damage (not when hit but no damage due to friendly fire protection or other plugins)
+- **Added**: Copper ore now gives mining experience (8 XP, same as coal)
+- **Improved**: Deepslate blocks already supported for mining XP
+- **Updated**: HUD and commands now display total experience correctly
 
 ### v1.0.0 (by R3io)
 - Initial release by R3io

@@ -28,16 +28,32 @@ public class DefenseListener implements Listener {
         }
         
         Player player = (Player) event.getEntity();
-        double damage = event.getFinalDamage();
         
-        // Give defense experience based on damage taken
-        double exp = damage * plugin.getConfigManager().getDefenseExpDamage();
-        experienceManager.addExperience(player, SkillType.DEFENSE, exp);
-        plugin.getHUDManager().showSkillProgress(player, SkillType.DEFENSE);
+        // Only give XP if player actually takes damage (not blocked by plugins)
+        // Check if the damage was cancelled or if final damage is 0
+        if (event.isCancelled() || event.getFinalDamage() <= 0) {
+            return;
+        }
         
-        // Update defense and combat bonuses
-        skillManager.updateDefenseBonuses(player);
-        skillManager.updateCombatBonuses(player);
+        // Get the player's health before damage
+        double healthBefore = player.getHealth();
+        
+        // Schedule check after damage is applied to verify actual damage taken
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            double healthAfter = player.getHealth();
+            double actualDamage = healthBefore - healthAfter;
+            
+            // Only give XP if player actually took damage (not blocked by friendly fire protection, etc.)
+            if (actualDamage > 0) {
+                double exp = actualDamage * plugin.getConfigManager().getDefenseExpDamage();
+                experienceManager.addExperience(player, SkillType.DEFENSE, exp);
+                plugin.getHUDManager().showSkillProgress(player, SkillType.DEFENSE);
+                
+                // Update defense and combat bonuses
+                skillManager.updateDefenseBonuses(player);
+                skillManager.updateCombatBonuses(player);
+            }
+        });
     }
     
     @EventHandler

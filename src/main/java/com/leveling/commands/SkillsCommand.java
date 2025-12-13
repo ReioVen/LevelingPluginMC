@@ -147,13 +147,13 @@ public class SkillsCommand implements CommandExecutor {
             try {
                 SkillType skill = SkillType.valueOf(args[0].toUpperCase());
                 int level = skillManager.getLevel(player, skill);
-                double exp = skillManager.getExperience(player, skill);
+                double totalExp = experienceManager.getTotalExperience(player, skill);
                 double progress = experienceManager.getProgressPercentage(player, skill);
                 double expForNext = experienceManager.getExperienceForNextLevel(player, skill);
                 
                 player.sendMessage("§6" + skill.getIcon() + " " + skill.getDisplayName());
                 player.sendMessage("§7Level: §e" + level);
-                player.sendMessage("§7Experience: §b" + String.format("%.1f", exp) + "§7/§b" + String.format("%.1f", expForNext));
+                player.sendMessage("§7Experience: §b" + String.format("%.1f", totalExp) + "§7/§b" + String.format("%.1f", expForNext));
                 player.sendMessage("§7Progress: §b" + String.format("%.1f", progress) + "%");
                 
                 // Show leaderboard for this skill

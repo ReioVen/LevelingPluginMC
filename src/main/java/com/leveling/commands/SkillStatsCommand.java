@@ -35,13 +35,13 @@ public class SkillStatsCommand implements CommandExecutor {
         
         for (SkillType skill : SkillType.values()) {
             int level = skillManager.getLevel(player, skill);
-            double exp = skillManager.getExperience(player, skill);
+            double totalExp = experienceManager.getTotalExperience(player, skill);
             double progress = experienceManager.getProgressPercentage(player, skill);
             double expForNext = experienceManager.getExperienceForNextLevel(player, skill);
             
             player.sendMessage("§6" + skill.getIcon() + " " + skill.getDisplayName());
             player.sendMessage("  §7Level: §e" + level);
-            player.sendMessage("  §7Current Experience: §b" + String.format("%.1f", exp));
+            player.sendMessage("  §7Total Experience: §b" + String.format("%.1f", totalExp));
             player.sendMessage("  §7Experience for Next Level: §b" + String.format("%.1f", expForNext));
             player.sendMessage("  §7Progress: §b" + String.format("%.1f", progress) + "%");
             
